@@ -1,4 +1,5 @@
 require_relative 'map'
+require_relative 'tile'
 
 MAP_FILE = 'map-64.txt'
 MAX_X = 1280
