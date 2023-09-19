@@ -42,7 +42,7 @@ class Tile
   def set_tile_select(args)
     return unless args.inputs.mouse.button_left
     mx, my = [args.inputs.mouse.x, args.inputs.mouse.y]
-    gx, gy = [map_pixel_x(mx), map_pixel_y(my)]
+    gx, gy = [Utils.map_pixel_x(mx), Utils.map_pixel_y(my)]
     args.state.map_selected = [gx, gy]
   end
 
@@ -61,17 +61,5 @@ class Tile
       border[:b] = 0
     end
     args.outputs.borders << border
-  end
-
-  # converts x pixel to map grid x
-  def map_pixel_x(x)
-    return 0 if x.to_i < 1
-    (x / TILE_SIZE).to_i
-  end
-
-  # converts y pixel to map grid y
-  def map_pixel_y(y)
-    return 0 if y.to_i < 1
-    (y / TILE_SIZE).to_i
   end
 end
