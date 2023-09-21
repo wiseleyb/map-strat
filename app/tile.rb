@@ -1,5 +1,5 @@
 class Tile
-  attr_accessor :x, :y, :terrain
+  attr_accessor :x, :y, :terrain, :piece
 
   def initialize(x, y, terrain)
     @x = x
@@ -34,16 +34,37 @@ class Tile
       tile[:b] = 95
     end
     args.outputs.solids << tile
-    set_tile_select(args)
+    click?(args)
     draw_border(args, tile)
   end
 
   # marks tile selected if user mouse clicks on it
-  def set_tile_select(args)
-    return unless args.inputs.mouse.button_left
+  def click?(args)
+    unless args.inputs.mouse.up #&& args.inputs.mouse.button_left
+      return false
+    end
+
+    # you get multiple events for mouse clicks - this prevents more than
+    # one event during a tick
+    if args.state.last_mouse_up_tick_count == args.state.tick_count
+      return false
+    end
+
+    # get pixel click
     mx, my = [args.inputs.mouse.x, args.inputs.mouse.y]
+    # convert to grid x,y
     gx, gy = [Utils.map_pixel_x(mx), Utils.map_pixel_y(my)]
-    args.state.map_selected = [gx, gy]
+
+    if args.state.map_selected == [gx, gy]
+      # de-select if selected
+      args.state.map_selected = []
+    else
+      # mark selected
+      args.state.map_selected = [gx, gy]
+    end
+
+    args.state.last_mouse_up_tick_count = args.state.tick_count
+    return true
   end
 
   # draws border around tile

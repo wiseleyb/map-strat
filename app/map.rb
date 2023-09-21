@@ -21,6 +21,5 @@ module Map
         args.state.tiles[idx][idy].draw(args)
       end
     end
-    Piece.new.draw(args)
   end
 end
